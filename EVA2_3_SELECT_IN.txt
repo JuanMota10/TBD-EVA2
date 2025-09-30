@@ -1,0 +1,535 @@
+Microsoft Windows [Versión 10.0.26100.4061]
+(c) Microsoft Corporation. Todos los derechos reservados.
+
+C:\Users\Juan Pablo>mysqlsh
+MySQL Shell 8.0.43
+
+Copyright (c) 2016, 2025, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 12
+Server version: 8.0.43 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > use tbd2
+Default schema set to `tbd2`.
+Fetching global names, object names from `tbd2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd2  SQL > show tables;
++----------------+
+| Tables_in_tbd2 |
++----------------+
+| asignatura     |
+| cliente        |
+| detallehorario |
+| estudiante     |
+| horario        |
+| producto       |
+| venta          |
+| ventadetalle   |
++----------------+
+8 rows in set (0.0123 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > desc venta;
++-----------+------+------+-----+---------+----------------+
+| Field     | Type | Null | Key | Default | Extra          |
++-----------+------+------+-----+---------+----------------+
+| idventa   | int  | NO   | PRI | NULL    | auto_increment |
+| fecha     | date | NO   |     | NULL    |                |
+| idcliente | int  | NO   | MUL | NULL    |                |
++-----------+------+------+-----+---------+----------------+
+3 rows in set (0.0131 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > show tables;
++----------------+
+| Tables_in_tbd2 |
++----------------+
+| asignatura     |
+| cliente        |
+| detallehorario |
+| estudiante     |
+| horario        |
+| producto       |
+| venta          |
+| ventadetalle   |
++----------------+
+8 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > show create table detallehorario;
++----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table          | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
++----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| detallehorario | CREATE TABLE `detallehorario` (
+  `iddetalle` int NOT NULL AUTO_INCREMENT,
+  `idhorario` int NOT NULL,
+  `idasignatura` int NOT NULL,
+  PRIMARY KEY (`iddetalle`),
+  KEY `detallehorario_ibfk_1` (`idhorario`),
+  KEY `detallehorario_ibfk_2` (`idasignatura`),
+  CONSTRAINT `detallehorario_ibfk_1` FOREIGN KEY (`idhorario`) REFERENCES `horario` (`idhorario`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `detallehorario_ibfk_2` FOREIGN KEY (`idasignatura`) REFERENCES `asignatura` (`idasignatura`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++----------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0136 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > show tables;
++----------------+
+| Tables_in_tbd2 |
++----------------+
+| asignatura     |
+| cliente        |
+| detallehorario |
+| estudiante     |
+| horario        |
+| producto       |
+| venta          |
+| ventadetalle   |
++----------------+
+8 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > show create table horario;
++---------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                                                                                                                                                                                                                                                                                                                                        |
++---------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| horario | CREATE TABLE `horario` (
+  `idhorario` int NOT NULL AUTO_INCREMENT,
+  `idestudiante` int NOT NULL,
+  PRIMARY KEY (`idhorario`),
+  KEY `idestudiante` (`idestudiante`),
+  CONSTRAINT `horario_ibfk_1` FOREIGN KEY (`idestudiante`) REFERENCES `estudiante` (`idestudiante`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++---------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0110 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from estudiante;
++--------------+-----------------+------------+
+| idestudiante | nombre          | fecha_nac  |
++--------------+-----------------+------------+
+|            2 | Michelle Tellez | 2003-10-02 |
+|            3 | Juan Mota       | 2004-08-10 |
+|           10 | Bryan Gonzalez  | 2001-07-18 |
++--------------+-----------------+------------+
+3 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from horario;
++-----------+--------------+
+| idhorario | idestudiante |
++-----------+--------------+
+|         2 |            2 |
+|         3 |            3 |
+|         1 |           10 |
++-----------+--------------+
+3 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from detallehorario;
++-----------+-----------+--------------+
+| iddetalle | idhorario | idasignatura |
++-----------+-----------+--------------+
+|         5 |         1 |            1 |
+|         6 |         1 |            2 |
+|         7 |         2 |            2 |
+|         8 |         3 |            3 |
++-----------+-----------+--------------+
+4 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from asignatura;
++--------------+----------------+----------+
+| idasignatura | nombre         | creditos |
++--------------+----------------+----------+
+|            1 | matematicas    |        8 |
+|            2 | programacion   |       10 |
+|            3 | bases de datos |        9 |
++--------------+----------------+----------+
+3 rows in set (0.0111 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > show create table horario;
++---------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table                                                                                                                                                                                                                                                                                                                                                                                        |
++---------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| horario | CREATE TABLE `horario` (
+  `idhorario` int NOT NULL AUTO_INCREMENT,
+  `idestudiante` int NOT NULL,
+  PRIMARY KEY (`idhorario`),
+  KEY `idestudiante` (`idestudiante`),
+  CONSTRAINT `horario_ibfk_1` FOREIGN KEY (`idestudiante`) REFERENCES `estudiante` (`idestudiante`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++---------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > alter table horario;
+Query OK, 0 rows affected (0.0180 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > alter table horario
+                                     -> drop constraint horario_ibfk_1;
+Query OK, 0 rows affected (0.0530 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd2  SQL > alter table horario
+                                     -> add constraint foreing key (idestudiante)
+                                     -> references estudiante(idestudiante)
+                                     -> on delete update
+                                     -> alter table hora;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key (idestudiante)
+references estudiante(idestudiante)
+on delete update
+alter ta' at line 2
+ MySQL  localhost:3306 ssl  tbd2  SQL > alter table horario add constraint foreing key (idestudiante) references estudiante(idestudiante) on delete cascade on update cascade;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key (idestudiante) references estudiante(idestudiante) on delete cascade on upda' at line 1
+ MySQL  localhost:3306 ssl  tbd2  SQL > show create detallehorario;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'detallehorario' at line 1
+ MySQL  localhost:3306 ssl  tbd2  SQL > alter table detallehorario
+                                     -> drop constraint detallehorario_ibfk_1;
+Query OK, 0 rows affected (0.0255 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd2  SQL > alter table detallehorario drop constraint detallehorario_ibfk_2;
+Query OK, 0 rows affected (0.0518 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd2  SQL > alter table horario
+                                     ->   add constraint fk_horario_estudiante
+                                     ->   foreign key (idestudiante)
+                                     ->   references estudiante(idestudiante)
+                                     ->   on delete cascade
+                                     ->   on update cascade;
+Query OK, 3 rows affected (0.0652 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd2  SQL > show create table detallehorario;
++----------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table          | Create Table                                                                                                                                                                                                                                                                                                                                       |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| detallehorario | CREATE TABLE `detallehorario` (
+  `iddetalle` int NOT NULL AUTO_INCREMENT,
+  `idhorario` int NOT NULL,
+  `idasignatura` int NOT NULL,
+  PRIMARY KEY (`iddetalle`),
+  KEY `detallehorario_ibfk_1` (`idhorario`),
+  KEY `detallehorario_ibfk_2` (`idasignatura`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > alter table detallehorario
+                                     ->   add constraint fk_detallehorario_horario
+                                     ->   foreign key (idhorario)
+                                     ->   references horario (idhorario)
+                                     ->   on delete cascade
+                                     ->   on update cascade;
+Query OK, 4 rows affected (0.0704 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd2  SQL >
+ MySQL  localhost:3306 ssl  tbd2  SQL > alter table detallehorario
+                                     ->   add constraint fk_detallehorario_asignatura
+                                     ->   foreign key (idasignatura)
+                                     ->   references asignatura (idasignatura)
+                                     ->   on delete cascade
+                                     ->   on update cascade;
+Query OK, 4 rows affected (0.0720 sec)
+
+Records: 4  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd2  SQL > show create table detallehorario;
++----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table          | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
++----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| detallehorario | CREATE TABLE `detallehorario` (
+  `iddetalle` int NOT NULL AUTO_INCREMENT,
+  `idhorario` int NOT NULL,
+  `idasignatura` int NOT NULL,
+  PRIMARY KEY (`iddetalle`),
+  KEY `fk_detallehorario_horario` (`idhorario`),
+  KEY `fk_detallehorario_asignatura` (`idasignatura`),
+  CONSTRAINT `fk_detallehorario_asignatura` FOREIGN KEY (`idasignatura`) REFERENCES `asignatura` (`idasignatura`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_detallehorario_horario` FOREIGN KEY (`idhorario`) REFERENCES `horario` (`idhorario`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from detallehorario;
++-----------+-----------+--------------+
+| iddetalle | idhorario | idasignatura |
++-----------+-----------+--------------+
+|         5 |         1 |            1 |
+|         6 |         1 |            2 |
+|         7 |         2 |            2 |
+|         8 |         3 |            3 |
++-----------+-----------+--------------+
+4 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from horario where idhorario= 5;
+Empty set (0.0016 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from horario where idestudiante;
++-----------+--------------+
+| idhorario | idestudiante |
++-----------+--------------+
+|         2 |            2 |
+|         3 |            3 |
+|         1 |           10 |
++-----------+--------------+
+3 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from asignatura;
++--------------+----------------+----------+
+| idasignatura | nombre         | creditos |
++--------------+----------------+----------+
+|            1 | matematicas    |        8 |
+|            2 | programacion   |       10 |
+|            3 | bases de datos |        9 |
++--------------+----------------+----------+
+3 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from horario where idhorario= 3;
++-----------+--------------+
+| idhorario | idestudiante |
++-----------+--------------+
+|         3 |            3 |
++-----------+--------------+
+1 row in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from horario where idestudiante;
++-----------+--------------+
+| idhorario | idestudiante |
++-----------+--------------+
+|         2 |            2 |
+|         3 |            3 |
+|         1 |           10 |
++-----------+--------------+
+3 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > delete from estudiante
+                                     -> where idestudiante = 3;
+Query OK, 1 row affected (0.0186 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from estudiante;
++--------------+-----------------+------------+
+| idestudiante | nombre          | fecha_nac  |
++--------------+-----------------+------------+
+|            2 | Michelle Tellez | 2003-10-02 |
+|           10 | Bryan Gonzalez  | 2001-07-18 |
++--------------+-----------------+------------+
+2 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from horario;
++-----------+--------------+
+| idhorario | idestudiante |
++-----------+--------------+
+|         2 |            2 |
+|         1 |           10 |
++-----------+--------------+
+2 rows in set (0.0004 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from detallehorario;
++-----------+-----------+--------------+
+| iddetalle | idhorario | idasignatura |
++-----------+-----------+--------------+
+|         5 |         1 |            1 |
+|         6 |         1 |            2 |
+|         7 |         2 |            2 |
++-----------+-----------+--------------+
+3 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > use sakila;
+Default schema set to `sakila`.
+Fetching global names, object names from `sakila` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  sakila  SQL > show tables;
++----------------------------+
+| Tables_in_sakila           |
++----------------------------+
+| actor                      |
+| actor_info                 |
+| address                    |
+| category                   |
+| city                       |
+| country                    |
+| customer                   |
+| customer_list              |
+| film                       |
+| film_actor                 |
+| film_category              |
+| film_list                  |
+| film_text                  |
+| inventory                  |
+| language                   |
+| nicer_but_slower_film_list |
+| payment                    |
+| rental                     |
+| sales_by_film_category     |
+| sales_by_store             |
+| staff                      |
+| staff_list                 |
+| store                      |
++----------------------------+
+23 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > use tbd2;
+Default schema set to `tbd2`.
+Fetching global names, object names from `tbd2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd2  SQL > show tables;
++----------------+
+| Tables_in_tbd2 |
++----------------+
+| asignatura     |
+| cliente        |
+| detallehorario |
+| estudiante     |
+| horario        |
+| producto       |
+| venta          |
+| ventadetalle   |
++----------------+
+8 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from venta;
++---------+------------+-----------+
+| idventa | fecha      | idcliente |
++---------+------------+-----------+
+|       3 | 2025-09-17 |         2 |
+|       4 | 2025-09-17 |         3 |
+|       5 | 2025-09-17 |         2 |
+|       6 | 2025-09-17 |         3 |
++---------+------------+-----------+
+4 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from cliente;
++-----------+--------+-----------+
+| idcliente | nombre | rfc       |
++-----------+--------+-----------+
+|         2 | JOSE   | DAIDISNEI |
+|         3 | GERA   | DIEUHFIU  |
++-----------+--------+-----------+
+2 rows in set (0.0265 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > insert into cliente(nombre, rfc)
+                                     -> value("Jose", "KOAJSDOE");
+Query OK, 1 row affected (0.0479 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from cliente;
++-----------+--------+-----------+
+| idcliente | nombre | rfc       |
++-----------+--------+-----------+
+|         2 | JOSE   | DAIDISNEI |
+|         3 | GERA   | DIEUHFIU  |
+|         4 | Jose   | KOAJSDOE  |
++-----------+--------+-----------+
+3 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from venta;
++---------+------------+-----------+
+| idventa | fecha      | idcliente |
++---------+------------+-----------+
+|       3 | 2025-09-17 |         2 |
+|       4 | 2025-09-17 |         3 |
+|       5 | 2025-09-17 |         2 |
+|       6 | 2025-09-17 |         3 |
++---------+------------+-----------+
+4 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from ventadetalle;
++----------------+---------+------------+----------+
+| idventadetalle | idventa | idproducto | cantidad |
++----------------+---------+------------+----------+
+|              1 |       3 |          1 |        5 |
+|              2 |       3 |          2 |        1 |
+|              3 |       4 |          3 |       10 |
+|              4 |       5 |          1 |        1 |
++----------------+---------+------------+----------+
+4 rows in set (0.0219 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from ventas;
+ERROR: 1146 (42S02): Table 'tbd2.ventas' doesn't exist
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from venta;
++---------+------------+-----------+
+| idventa | fecha      | idcliente |
++---------+------------+-----------+
+|       3 | 2025-09-17 |         2 |
+|       4 | 2025-09-17 |         3 |
+|       5 | 2025-09-17 |         2 |
+|       6 | 2025-09-17 |         3 |
++---------+------------+-----------+
+4 rows in set (0.0004 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from cliente;
++-----------+--------+-----------+
+| idcliente | nombre | rfc       |
++-----------+--------+-----------+
+|         2 | JOSE   | DAIDISNEI |
+|         3 | GERA   | DIEUHFIU  |
+|         4 | Jose   | KOAJSDOE  |
++-----------+--------+-----------+
+3 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from cliente;
++-----------+--------+-----------+
+| idcliente | nombre | rfc       |
++-----------+--------+-----------+
+|         2 | JOSE   | DAIDISNEI |
+|         3 | GERA   | DIEUHFIU  |
+|         4 | Jose   | KOAJSDOE  |
++-----------+--------+-----------+
+3 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from cliente
+                                     -> where idcliente in (select idcliente from venta);
++-----------+--------+-----------+
+| idcliente | nombre | rfc       |
++-----------+--------+-----------+
+|         2 | JOSE   | DAIDISNEI |
+|         3 | GERA   | DIEUHFIU  |
++-----------+--------+-----------+
+2 rows in set (0.0439 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select idcliente from venta;
++-----------+
+| idcliente |
++-----------+
+|         2 |
+|         2 |
+|         3 |
+|         3 |
++-----------+
+4 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select distinct idcliente from venta;
++-----------+
+| idcliente |
++-----------+
+|         2 |
+|         3 |
++-----------+
+2 rows in set (0.0105 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from cliente
+                                     -> where idcliente in (select distint idcliente from venta);
+ERROR: 1054 (42S22): Unknown column 'distint' in 'field list'
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from cliente where idcliente in (select distinct idcliente from venta);
+
++-----------+--------+-----------+
+| idcliente | nombre | rfc       |
++-----------+--------+-----------+
+|         2 | JOSE   | DAIDISNEI |
+|         3 | GERA   | DIEUHFIU  |
++-----------+--------+-----------+
+2 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from cliente where idcliente not in (select distinct idcliente from venta);
++-----------+--------+----------+
+| idcliente | nombre | rfc      |
++-----------+--------+----------+
+|         4 | Jose   | KOAJSDOE |
++-----------+--------+----------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from ventadetalle;
++----------------+---------+------------+----------+
+| idventadetalle | idventa | idproducto | cantidad |
++----------------+---------+------------+----------+
+|              1 |       3 |          1 |        5 |
+|              2 |       3 |          2 |        1 |
+|              3 |       4 |          3 |       10 |
+|              4 |       5 |          1 |        1 |
++----------------+---------+------------+----------+
+4 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > desc producto;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| idproducto | int          | NO   | PRI | NULL    | auto_increment |
+| nombre     | varchar(100) | NO   |     | NULL    |                |
+| precio     | decimal(8,2) | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+3 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from producto
+                                     -> where idproducto in
+                                     -> (select distinct idproducto from ventadetalle);
++------------+---------+----------+
+| idproducto | nombre  | precio   |
++------------+---------+----------+
+|          1 | Celular | 10000.00 |
+|          2 | TV      | 15456.20 |
+|          3 | Laptop  | 49343.20 |
++------------+---------+----------+
+3 rows in set (0.0571 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select * from producto where idproducto not in (select distinct idproducto from ventadetalle);
+Empty set (0.0005 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select count(*) from producto where idproducto not in (select distinct idproducto from ventadetalle);
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+1 row in set (0.0121 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL > select count(*) from producto where idproducto  in (select distinct idproducto from ventadetalle);
++----------+
+| count(*) |
++----------+
+|        3 |
++----------+
+1 row in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  tbd2  SQL >
